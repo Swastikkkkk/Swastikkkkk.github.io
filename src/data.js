@@ -28,7 +28,7 @@ export const projects = [
     name: 'PrepNinja',
     kind: 'AI platform',
     year: '2026',
-    img: '/work/prepninja.jpg',
+    img: '/work/prepninja-tall.jpg',
     desc: 'Proctored AI mock interviews, coding rounds with a sandboxed code runner, and an ATS resume check, in one place.',
     engineering:
       'Gemini writes role-specific questions. Video answers are transcribed with Deepgram and scored on five axes. Coding problems keep only the test cases that Gemini’s own solution passes in a Judge0 sandbox. A per-topic skill score drives a weekly study plan, benchmarked against BKT and DKT on ASSISTments.',

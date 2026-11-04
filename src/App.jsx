@@ -2,71 +2,68 @@ import { useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import { FiArrowUpRight, FiPlus, FiMinus, FiMail } from 'react-icons/fi'
+import { FiArrowUpRight, FiChevronDown, FiCopy, FiCheck } from 'react-icons/fi'
 import { FaGithub, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
 import { links, highlights, projects, more, experience, wins } from './data'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-const pad = (n) => String(n).padStart(2, '0')
+const roles = ['web apps', 'iOS apps', 'AI agents', 'browser games']
 
-function Ext({ href, children, className = '' }) {
+function Socials() {
   return (
-    <a className={`ext ${className}`} href={href} target="_blank" rel="noreferrer">
-      {children}
-      <FiArrowUpRight aria-hidden />
-    </a>
+    <div className="socials">
+      <a href={links.github} target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a>
+      <a href={links.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedinIn /></a>
+      <a href={links.x} target="_blank" rel="noreferrer" aria-label="X"><FaXTwitter /></a>
+    </div>
   )
 }
 
 function MeshArt() {
-  const nodes = [[90, 70], [210, 50], [320, 110], [150, 170], [270, 210], [60, 230], [360, 240]]
+  const nodes = [[90, 80], [210, 55], [330, 105], [160, 170], [280, 205], [70, 225], [360, 235]]
   const edges = [[0, 1], [1, 2], [0, 3], [1, 3], [3, 4], [2, 4], [3, 5], [4, 6], [2, 6]]
   return (
-    <svg viewBox="0 0 420 300" className="art" aria-hidden>
+    <svg viewBox="0 0 420 280" className="mesh" aria-hidden>
       {edges.map(([a, b], i) => (
-        <line key={i} x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]} className="art-line" />
+        <line key={i} x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]} />
       ))}
       {nodes.map(([x, y], i) => (
-        <g key={i} transform={`translate(${x - 11} ${y - 18})`}>
-          <rect width="22" height="36" rx="5" className={i === 3 ? 'art-node hot' : 'art-node'} />
-          <rect x="8" y="30" width="6" height="2" rx="1" className="art-dot" />
-        </g>
+        <rect key={i} x={x - 10} y={y - 17} width="20" height="34" rx="6" className={i === 3 ? 'hot' : ''} />
       ))}
-      <text x="24" y="285" className="art-cap">NO INTERNET / MULTI-HOP</text>
     </svg>
   )
 }
 
-function Case({ p, i }) {
+function Card({ p, size }) {
   const [open, setOpen] = useState(false)
   return (
-    <article className="case reveal">
-      <div className="case-media">
-        <div className="case-top"><span>Case {pad(i + 1)}</span><span>{p.year}</span></div>
-        {p.img ? <img src={p.img} alt={`${p.name} screenshot`} loading="lazy" /> : <MeshArt />}
-        <div className="case-bottom">{p.kind}</div>
-      </div>
-      <div className="case-body">
-        <div className="case-head">
-          <h3>{p.name}</h3>
-          <a className="case-arrow" href={p.live || p.code} target="_blank" rel="noreferrer" aria-label={`Open ${p.name}`}>
-            <FiArrowUpRight />
-          </a>
+    <article className={`card ${size} reveal`}>
+      <a className="card-media" href={p.live || p.code} target="_blank" rel="noreferrer" aria-label={`Open ${p.name}`}>
+        {p.img ? <img src={p.img} alt="" loading="lazy" /> : <MeshArt />}
+        <span className="open"><FiArrowUpRight /></span>
+      </a>
+      <div className="card-body">
+        <div className="card-meta">
+          <span>{p.kind}</span>
+          {p.award && <span className="badge">{p.award}</span>}
         </div>
-        {p.award && <p className="award">{p.award}</p>}
-        <p className="desc">{p.desc}</p>
-        <button className={`eng ${open ? 'on' : ''}`} onClick={() => setOpen(!open)} aria-expanded={open}>
-          <span>The engineering</span>
-          {open ? <FiMinus /> : <FiPlus />}
-        </button>
-        <div className="eng-body" style={{ gridTemplateRows: open ? '1fr' : '0fr' }}>
-          <p>{p.engineering}</p>
+        <h3>{p.name}</h3>
+        <p className="muted">{p.desc}</p>
+        <div className="card-foot">
+          <button className={`how ${open ? 'on' : ''}`} onClick={() => setOpen(!open)} aria-expanded={open}>
+            How it works <FiChevronDown />
+          </button>
+          <div className="card-links">
+            {p.live && <a href={p.live} target="_blank" rel="noreferrer">Live</a>}
+            <a href={p.code} target="_blank" rel="noreferrer">Code</a>
+          </div>
         </div>
-        <ul className="tags">{p.stack.map((s) => <li key={s}>{s}</li>)}</ul>
-        <div className="case-links">
-          {p.live && <Ext href={p.live}>Live</Ext>}
-          <Ext href={p.code}>Source</Ext>
+        <div className="how-body" style={{ gridTemplateRows: open ? '1fr' : '0fr' }}>
+          <div>
+            <p>{p.engineering}</p>
+            <div className="chips">{p.stack.map((s) => <span key={s}>{s}</span>)}</div>
+          </div>
         </div>
       </div>
     </article>
@@ -75,138 +72,150 @@ function Case({ p, i }) {
 
 export default function App() {
   const root = useRef(null)
+  const [copied, setCopied] = useState(false)
 
   useGSAP(() => {
     const mm = gsap.matchMedia()
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.from('.hero-line', { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.08 })
-      gsap.from('.hero-fade', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.35, stagger: 0.06 })
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      tl.from('.hero-in', { opacity: 0, y: 18, duration: 0.8, stagger: 0.07 })
+        .from('.stack', { opacity: 0, y: 40, duration: 1 }, 0.15)
+
+      // rotating role word
+      const words = gsap.utils.toArray('.role-word')
+      const roll = gsap.timeline({ repeat: -1 })
+      words.forEach((w, i) => {
+        roll.set(words, { yPercent: 110, opacity: 0 }, i === 0 ? 0 : undefined)
+        roll.to(w, { yPercent: 0, opacity: 1, duration: 0.5, ease: 'power3.out' })
+        roll.to(w, { yPercent: -110, opacity: 0, duration: 0.45, ease: 'power3.in' }, '+=1.6')
+      })
+
       gsap.utils.toArray('.reveal').forEach((el) => {
-        gsap.from(el, {
-          opacity: 0, y: 28, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-        })
+        gsap.from(el, { opacity: 0, y: 24, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } })
       })
     })
+    mm.add('(prefers-reduced-motion: reduce)', () => {
+      gsap.set('.role-word', { opacity: 0 })
+      gsap.set('.role-word:first-child', { opacity: 1, yPercent: 0 })
+    })
   }, { scope: root })
+
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(links.email); setCopied(true); setTimeout(() => setCopied(false), 1800) } catch { window.location.href = `mailto:${links.email}` }
+  }
+
+  const sizes = ['wide', 'tall', 'half', 'half', 'third', 'third']
 
   return (
     <div ref={root}>
       <header className="nav">
-        <a href="#top" className="logo">swastik<span>.</span></a>
+        <a href="#top" className="logo">s<span>.</span></a>
         <nav>
           <a href="#work">Work</a>
-          <a href="#experience">Experience</a>
+          <a href="#journey">Journey</a>
           <a href="#contact">Contact</a>
         </nav>
       </header>
 
       <main id="top">
         <section className="hero wrap">
-          <div className="hero-main">
-          <h1 aria-label="Swastik Dutt">
-            <span className="mask"><span className="hero-line">Swastik</span></span>
-            <span className="mask"><span className="hero-line">Dutt</span></span>
-          </h1>
-          <p className="role hero-fade">Incoming SDE at JPMorgan Chase</p>
-          <p className="intro hero-fade">
-            I build products end to end: web apps, the services behind them, iOS apps, and the AI that makes them useful.
-            Final-year CS at Manipal University Jaipur.
-          </p>
-          <div className="cta hero-fade">
-            <a className="btn solid" href="#work">View the work</a>
-            <a className="btn" href={`mailto:${links.email}`}><FiMail /> Email me</a>
+          <div className="hero-text">
+            <span className="pill hero-in"><i /> Incoming SDE at JPMorgan Chase</span>
+            <h1 className="hero-in">Swastik Dutt</h1>
+            <p className="lede hero-in">
+              I build{' '}
+              <span className="roles" aria-label={roles.join(', ')}>
+                {roles.map((r) => <span key={r} className="role-word">{r}</span>)}
+              </span>
+              <br />from the first commit to the deploy.
+            </p>
+            <p className="muted hero-in">Final-year CS at Manipal University Jaipur. Interned on iOS Payments at JPMorgan Chase.</p>
+            <div className="hero-cta hero-in">
+              <a className="btn primary" href="#work">See my work</a>
+              <a className="btn" href={`mailto:${links.email}`}>Get in touch</a>
+              <Socials />
+            </div>
           </div>
-          <div className="socials hero-fade">
-            <a href={links.github} target="_blank" rel="noreferrer"><FaGithub /> GitHub</a>
-            <a href={links.linkedin} target="_blank" rel="noreferrer"><FaLinkedinIn /> LinkedIn</a>
-            <a href={links.x} target="_blank" rel="noreferrer"><FaXTwitter /> X</a>
-          </div>
-          </div>
-          <aside className="now hero-fade">
-            <div className="now-top"><span>Now</span><span>2026</span></div>
-            <dl>
-              <div><dt>Studying</dt><dd>Final-year CS, Manipal University Jaipur</dd></div>
-              <div><dt>Next</dt><dd>SDE at JPMorgan Chase</dd></div>
-              <div><dt>Building</dt><dd><a href="https://www.sketchracer.com" target="_blank" rel="noreferrer">SketchRacer</a>, a driving game for the browser</dd></div>
-              <div><dt>Based in</dt><dd>Noida, India</dd></div>
-            </dl>
-          </aside>
+          <a className="stack" href="#work" aria-label="See my work">
+            <img src="/work/jalnetra.jpg" alt="" />
+            <img src="/work/chatsnitch.jpg" alt="" />
+            <img src="/work/sketchracer.jpg" alt="" />
+          </a>
         </section>
 
-        <section className="wrap">
-          <div className="strip">
-            {highlights.map((h, i) => (
-              <div className="strip-item reveal" key={h.title}>
-                <span className="num">{pad(i + 1)}</span>
-                <div>
-                  <span className="kicker">{h.k}</span>
-                  <strong>{h.title}</strong>
-                  <span className="muted">{h.sub}</span>
-                </div>
-              </div>
+        <section className="wrap badges reveal">
+          {highlights.map((h) => (
+            <div className="badge-card" key={h.title}>
+              <span className="muted small">{h.k === 'Next' ? 'Up next' : 'Won'}</span>
+              <strong>{h.title}</strong>
+              <span className="muted small">{h.sub}</span>
+            </div>
+          ))}
+        </section>
+
+        <section id="work" className="wrap section">
+          <div className="section-head reveal">
+            <h2>Selected work</h2>
+            <p className="muted">Things I've shipped. Click any card to open it, or see how it works.</p>
+          </div>
+          <div className="bento">
+            {projects.map((p, i) => <Card key={p.name} p={p} size={sizes[i]} />)}
+          </div>
+          <div className="also reveal">
+            <span className="muted small">Also built</span>
+            {more.map((m) => (
+              <a key={m.name} href={m.href} target="_blank" rel="noreferrer" title={m.desc}>
+                {m.name} <FiArrowUpRight />
+              </a>
             ))}
           </div>
         </section>
 
-        <section id="work" className="wrap section">
-          <h2 className="reveal">Work<span>.</span></h2>
-          <div className="cases">
-            {projects.map((p, i) => <Case p={p} i={i} key={p.name} />)}
+        <section id="journey" className="wrap section two">
+          <div>
+            <div className="section-head reveal"><h2>Journey</h2></div>
+            <ol className="timeline">
+              {experience.map((e) => (
+                <li key={e.role} className="reveal">
+                  <span className="dot" />
+                  <span className="muted small">{e.when}</span>
+                  <strong>{e.org}</strong>
+                  <span>{e.role}</span>
+                  <p className="muted">{e.note}</p>
+                </li>
+              ))}
+            </ol>
           </div>
-          <div className="more reveal">
-            <span className="label">Also built</span>
-            <div className="more-grid">
-              {more.map((m) => (
-                <a key={m.name} href={m.href} target="_blank" rel="noreferrer" className="more-item">
-                  <strong>{m.name} <FiArrowUpRight /></strong>
-                  <span className="muted">{m.desc}</span>
-                </a>
+          <div>
+            <div className="section-head reveal"><h2>Wins</h2></div>
+            <div className="wins">
+              {wins.map((w) => (
+                <div className="win reveal" key={w.what}>
+                  <span className="win-result">{w.result}</span>
+                  <strong>{w.what}</strong>
+                  <span className="muted small">{w.note}</span>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="experience" className="wrap section">
-          <h2 className="reveal">Experience<span>.</span></h2>
-          <ul className="rows">
-            {experience.map((e) => (
-              <li className="row reveal" key={e.role}>
-                <span className="when">{e.when}</span>
-                <div>
-                  <strong>{e.org}</strong>
-                  <span className="muted">{e.role}</span>
-                </div>
-                <p className="muted note">{e.note}</p>
-              </li>
-            ))}
-          </ul>
-
-          <h2 className="reveal sub">Wins<span>.</span></h2>
-          <ul className="rows">
-            {wins.map((w) => (
-              <li className="row reveal" key={w.what}>
-                <span className="when">{w.result}</span>
-                <div><strong>{w.what}</strong></div>
-                <p className="muted note">{w.note}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section id="contact" className="wrap section contact">
-          <h2 className="reveal">Say hello<span>.</span></h2>
-          <a className="mail reveal" href={`mailto:${links.email}`}>{links.email}</a>
-          <div className="socials reveal">
-            <a href={links.github} target="_blank" rel="noreferrer"><FaGithub /> GitHub</a>
-            <a href={links.linkedin} target="_blank" rel="noreferrer"><FaLinkedinIn /> LinkedIn</a>
-            <a href={links.x} target="_blank" rel="noreferrer"><FaXTwitter /> X</a>
+        <section id="contact" className="wrap section">
+          <div className="contact reveal">
+            <h2>Let's build something.</h2>
+            <p className="muted">Open to interesting problems, collaborations and a good chat.</p>
+            <div className="contact-row">
+              <button className="btn primary" onClick={copy}>
+                {copied ? <><FiCheck /> Copied</> : <><FiCopy /> {links.email}</>}
+              </button>
+              <Socials />
+            </div>
           </div>
         </section>
       </main>
 
       <footer className="wrap foot">
-        <span>Swastik Dutt</span>
+        <span>© 2026 Swastik Dutt</span>
         <span>Noida, India</span>
       </footer>
     </div>
