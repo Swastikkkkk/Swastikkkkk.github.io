@@ -87,10 +87,7 @@ export const projects = [
 ]
 
 export const more = [
-  { name: 'AmExpert', desc: 'Card-servicing AI agent over voice, WhatsApp, SMS and email.', href: 'https://github.com/Swastikkkkk/amexpert' },
-  { name: 'agentdrift', desc: 'Merges clashing AGENTS.md, CLAUDE.md and .cursorrules into one.', href: 'https://agentdrift.vercel.app' },
   { name: 'DisasterAR', desc: 'Offline AR evacuation that routes around hazards.', href: 'https://github.com/Swastikkkkk/disasterevac' },
-  { name: 'brag-ext', desc: 'Turns any GitHub repo into a short promo video.', href: 'https://github.com/Swastikkkkk/brag-ext' },
 ]
 
 export const experience = [
