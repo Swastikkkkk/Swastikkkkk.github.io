@@ -154,7 +154,7 @@ h3 { font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 
 /* also built */
 .more { padding-top: 36px; }
 .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
-.more-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 14px; border-top: 1px solid var(--line); }
+.more-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 14px; border-top: 1px solid var(--line); }
 .more-item { display: flex; flex-direction: column; gap: 4px; padding: 16px 16px 16px 0; border-bottom: 1px solid var(--line); transition: opacity 0.2s; }
 .more-item + .more-item { padding-left: 16px; border-left: 1px solid var(--line); }
 .more-item strong { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; }
@@ -188,8 +188,6 @@ h3 { font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 
 @media (max-width: 880px) {
   .hero { grid-template-columns: 1fr; align-items: start; }
   .case { grid-template-columns: 1fr; gap: 24px; }
-  .more-grid { grid-template-columns: 1fr 1fr; }
-  .more-item:nth-child(3) { padding-left: 0; border-left: 0; }
 }
 @media (max-width: 640px) {
   .nav nav { gap: 16px; }

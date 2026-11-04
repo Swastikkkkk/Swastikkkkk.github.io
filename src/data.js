@@ -88,6 +88,7 @@ export const projects = [
 
 export const more = [
   { name: 'DisasterAR', desc: 'Offline AR evacuation that routes around hazards.', href: 'https://github.com/Swastikkkkk/disasterevac' },
+  { name: 'Guardian', desc: 'Safe-route engine that scores streets from map, weather and camera data.', href: 'https://github.com/Swastikkkkk/guardian-backend' },
 ]
 
 export const experience = [
