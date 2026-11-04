@@ -100,9 +100,31 @@ export const experience = [
   { org: 'NetNivaran', role: 'Web Development Intern', when: '2024', note: 'Mobile-first rebuild with 60% faster load times.' },
 ]
 
+export const winsCount = 13
+
 export const wins = [
-  { what: 'Smart India Hackathon 2025', result: 'Winner', note: '68,000+ teams' },
-  { what: 'Google Codeclash 2.0', result: 'First place', note: 'With Lerno.ai, 1,000+ teams' },
-  { what: 'ZS Campus Beats 2026', result: 'Second runner-up', note: 'AI Builders track' },
-  { what: 'IIC 2.0', result: 'Runner-up', note: 'National hackathon' },
+  {
+    year: '2025',
+    what: 'Smart India Hackathon',
+    built: 'WaveWatch',
+    note: 'A live civic hazard map for citizens and city teams. Came out on top of 68,000+ teams nationwide.',
+  },
+  {
+    year: '2025',
+    what: 'Google Codeclash 2.0',
+    built: 'Lerno.ai',
+    note: 'Turns any concept into a narrated, animated lesson. First place at Google Gurugram, ahead of 1,000+ teams.',
+  },
+  {
+    year: '2026',
+    what: 'ZS Campus Beats',
+    built: 'AI Builders track',
+    note: 'Second runner-up, one of three podium spots.',
+  },
+  {
+    year: '2025',
+    what: 'IIC 2.0',
+    built: 'InternSetu',
+    note: 'Matching students to internships. Runner-up at the national round.',
+  },
 ]

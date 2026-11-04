@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { FiArrowUpRight, FiPlus, FiMinus, FiMail } from 'react-icons/fi'
 import { FaGithub, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
-import { links, highlights, projects, more, experience, wins } from './data'
+import { links, highlights, projects, more, experience, wins, winsCount } from './data'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -182,12 +182,15 @@ export default function App() {
             ))}
           </ul>
 
-          <h2 className="reveal sub">Wins<span>.</span></h2>
+          <div className="wins-head reveal">
+            <h2 className="sub">Wins<span>.</span></h2>
+            <p className="wins-count"><strong>{winsCount}</strong> hackathon wins. The ones I'm proudest of:</p>
+          </div>
           <ul className="rows">
             {wins.map((w) => (
               <li className="row reveal" key={w.what}>
-                <span className="when">{w.result}</span>
-                <div><strong>{w.what}</strong></div>
+                <span className="when">{w.what} <em>{w.year}</em></span>
+                <div><strong>{w.built}</strong></div>
                 <p className="muted note">{w.note}</p>
               </li>
             ))}

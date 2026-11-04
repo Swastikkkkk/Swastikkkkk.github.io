@@ -101,7 +101,11 @@ h2 {
   font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 6vw, 68px); line-height: 1;
   padding-bottom: 18px; border-bottom: 1.5px solid var(--ink); margin-bottom: 8px;
 }
-h2.sub { margin-top: 72px; }
+.wins-head { margin-top: 72px; }
+.wins-head h2 { margin-top: 0; }
+.wins-count { margin-top: 14px; color: var(--sub); font-size: 15px; }
+.wins-count strong { font-family: var(--serif); font-weight: 400; font-size: 34px; color: var(--ink); margin-right: 6px; vertical-align: -3px; }
+.when em { display: block; font-style: normal; color: var(--faint); margin-top: 2px; }
 
 /* cases */
 .case { display: grid; grid-template-columns: 420px 1fr; gap: 44px; padding: 40px 0; border-bottom: 1px solid var(--line); }
@@ -158,7 +162,7 @@ h3 { font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 
 .more-item:hover strong { color: var(--accent); }
 
 /* rows */
-.row { display: grid; grid-template-columns: 140px 1fr 1.2fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.row { display: grid; grid-template-columns: 210px 1fr 1.4fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
 .row div { display: flex; flex-direction: column; }
 .row strong { font-weight: 600; }
 .when { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
