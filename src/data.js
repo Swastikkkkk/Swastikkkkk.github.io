@@ -57,7 +57,7 @@ export const projects = [
     engineering:
       'EventBridge runs a Lambda every 3 hours that checks 681 river points against GloFAS forecasts. When a river rises it works out which of 291 villages are hit and when. Bedrock drafts the advisory, a human approves it, and a Hindi voice call goes out. RDS keeps the call ledger; CloudFront and WAF sit in front.',
     stack: ['AWS Lambda', 'Bedrock', 'RDS', 'React', 'TypeScript'],
-    live: 'https://d1oi8xa605dsj6.cloudfront.net',
+    live: 'https://jalnetra-lilac.vercel.app',
     code: 'https://github.com/Swastikkkkk/jalnetra',
   },
   {
