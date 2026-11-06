@@ -5,10 +5,12 @@ export const links = {
   x: 'https://x.com/SwastikDutt',
 }
 
-export const highlights = [
-  { k: 'Next', title: 'JPMorgan Chase', sub: 'Incoming Software Development Engineer' },
-  { k: 'Won', title: 'Smart India Hackathon 2025', sub: 'Winner out of 68,000+ teams' },
-  { k: 'Won', title: 'Google Codeclash 2.0', sub: 'First place with ExplAInr' },
+// Add `img: '/moments/xyz.jpg'` to any stat to show a photo behind it.
+export const stats = [
+  { value: 13, label: 'Hackathon wins', sub: 'SIH 2025, Google CodeClash 2.0, ZS Campus Beats' },
+  { value: 6, label: 'Products live', sub: 'iOS, web, AI and a Chrome extension' },
+  { value: 3, label: 'Internships', sub: 'JPMorgan Chase, KPMG, NetNivaran' },
+  { value: 9.24, decimals: 2, label: 'CGPA', sub: 'CS at Manipal University Jaipur' },
 ]
 
 export const projects = [

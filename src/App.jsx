@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useGSAP } from '@gsap/react'
 import { FiArrowUpRight, FiPlus, FiMinus, FiMail } from 'react-icons/fi'
 import { FaGithub, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
-import { links, highlights, projects, more, experience, wins, winsCount } from './data'
+import { links, stats, projects, more, experience, wins, winsCount } from './data'
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP)
 
@@ -158,11 +158,6 @@ function Case({ p }) {
         .from(el.querySelectorAll('.case-top, .case-bottom'), { opacity: 0, duration: 0.6 }, 0.3)
         .from(el.querySelectorAll('.case-body > *'), { opacity: 0, y: 22, duration: 0.8, ease: 'power3.out', stagger: 0.07 }, 0.15)
 
-      const img = el.querySelector('.case-zoom img')
-      if (img) {
-        gsap.fromTo(img, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } })
-      }
-
       const zoom = gsap.quickTo(el.querySelector('.case-zoom'), 'scale', { duration: 0.6, ease: 'power3.out' })
       const media = el.querySelector('.case-media')
       const enter = () => zoom(1.04)
@@ -230,12 +225,40 @@ function Case({ p }) {
 
 export default function App() {
   const root = useRef(null)
+  const nameRef = useRef(null)
+
+  // Size the name so it spans the full content width on one line.
+  useLayoutEffect(() => {
+    const h = nameRef.current
+    const line = h.querySelector('.hero-line')
+    const fit = () => {
+      h.style.fontSize = '100px'
+      const w = line.scrollWidth
+      if (w) h.style.fontSize = `${Math.floor((100 * h.clientWidth) / w) - 1}px`
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(h)
+    document.fonts?.ready.then(fit)
+    return () => ro.disconnect()
+  }, [])
 
   useGSAP(() => {
     const mm = gsap.matchMedia()
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.from('.hero-line', { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.08 })
       gsap.from('.hero-fade', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.35, stagger: 0.06 })
+      gsap.utils.toArray('.stat-num').forEach((el) => {
+        const end = parseFloat(el.dataset.value)
+        const dec = parseInt(el.dataset.decimals, 10)
+        const o = { v: 0 }
+        gsap.to(o, {
+          v: end, duration: 1.6, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+          onUpdate: () => { el.textContent = o.v.toFixed(dec) },
+        })
+      })
+      gsap.from('.stat', { opacity: 0, y: 24, duration: 0.8, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger: '.stats', start: 'top 90%', once: true } })
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.from(el, {
           opacity: 0, y: 28, duration: 0.9, ease: 'power3.out',
@@ -258,47 +281,45 @@ export default function App() {
 
       <main id="top">
         <section className="hero wrap">
-          <div className="hero-main">
-          <h1 aria-label="Swastik Dutt">
-            <span className="mask"><span className="hero-line">Swastik</span></span>
-            <span className="mask"><span className="hero-line">Dutt</span></span>
+          <h1 aria-label="Swastik Dutt" ref={nameRef}>
+            <span className="mask"><span className="hero-line">Swastik Dutt</span></span>
           </h1>
-          <p className="role hero-fade">Incoming SDE at JPMorgan Chase</p>
-          <p className="intro hero-fade">
-            I build products end to end: web apps, the services behind them, iOS apps, and the AI that makes them useful.
-            Final-year CS at Manipal University Jaipur.
-          </p>
-          <div className="cta hero-fade">
-            <a className="btn solid" href="#work">View the work</a>
-            <a className="btn" href={`mailto:${links.email}`}><FiMail /> Email me</a>
+          <div className="hero-row">
+            <div className="hero-main">
+              <p className="role hero-fade">Incoming SDE at JPMorgan Chase</p>
+              <p className="intro hero-fade">
+                I build products end to end: web apps, the services behind them, iOS apps, and the AI that makes them useful.
+                Final-year CS at Manipal University Jaipur.
+              </p>
+              <div className="cta hero-fade">
+                <a className="btn solid" href="#work">View the work</a>
+                <a className="btn" href={`mailto:${links.email}`}><FiMail /> Email me</a>
+              </div>
+              <div className="socials hero-fade">
+                <a href={links.github} target="_blank" rel="noreferrer"><FaGithub /> GitHub</a>
+                <a href={links.linkedin} target="_blank" rel="noreferrer"><FaLinkedinIn /> LinkedIn</a>
+                <a href={links.x} target="_blank" rel="noreferrer"><FaXTwitter /> X</a>
+              </div>
+            </div>
+            <aside className="now hero-fade">
+              <div className="now-top"><span>Now</span><span>2026</span></div>
+              <dl>
+                <div><dt>Studying</dt><dd>Final-year CS, Manipal University Jaipur</dd></div>
+                <div><dt>Next</dt><dd>SDE at JPMorgan Chase</dd></div>
+                <div><dt>Building</dt><dd><a href="https://www.sketchracer.com" target="_blank" rel="noreferrer">SketchRacer</a>, a driving game for the browser</dd></div>
+                <div><dt>Based in</dt><dd>Noida, India</dd></div>
+              </dl>
+            </aside>
           </div>
-          <div className="socials hero-fade">
-            <a href={links.github} target="_blank" rel="noreferrer"><FaGithub /> GitHub</a>
-            <a href={links.linkedin} target="_blank" rel="noreferrer"><FaLinkedinIn /> LinkedIn</a>
-            <a href={links.x} target="_blank" rel="noreferrer"><FaXTwitter /> X</a>
-          </div>
-          </div>
-          <aside className="now hero-fade">
-            <div className="now-top"><span>Now</span><span>2026</span></div>
-            <dl>
-              <div><dt>Studying</dt><dd>Final-year CS, Manipal University Jaipur</dd></div>
-              <div><dt>Next</dt><dd>SDE at JPMorgan Chase</dd></div>
-              <div><dt>Building</dt><dd><a href="https://www.sketchracer.com" target="_blank" rel="noreferrer">SketchRacer</a>, a driving game for the browser</dd></div>
-              <div><dt>Based in</dt><dd>Noida, India</dd></div>
-            </dl>
-          </aside>
         </section>
 
         <section className="wrap">
-          <div className="strip">
-            {highlights.map((h, i) => (
-              <div className="strip-item reveal" key={h.title}>
-                <span className="num">{pad(i + 1)}</span>
-                <div>
-                  <span className="kicker">{h.k}</span>
-                  <strong>{h.title}</strong>
-                  <span className="muted">{h.sub}</span>
-                </div>
+          <div className="stats">
+            {stats.map((st) => (
+              <div className={`stat ${st.img ? 'has-img' : ''}`} key={st.label} style={st.img ? { backgroundImage: `url(${st.img})` } : undefined}>
+                <span className="stat-num" data-value={st.value} data-decimals={st.decimals || 0}>{st.value}</span>
+                <strong>{st.label}</strong>
+                <span className="muted">{st.sub}</span>
               </div>
             ))}
           </div>
