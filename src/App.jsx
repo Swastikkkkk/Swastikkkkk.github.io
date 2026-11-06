@@ -279,8 +279,6 @@ export default function App() {
     rail.addEventListener('mouseleave', resume)
     rail.addEventListener('focusin', pause)
     rail.addEventListener('focusout', resume)
-    rail.parentElement.querySelector('.cases-prev')?.addEventListener('click', () => move(-1))
-    rail.parentElement.querySelector('.cases-next')?.addEventListener('click', () => move(1))
     frame = requestAnimationFrame(tick)
     return () => {
       cancelAnimationFrame(frame)
@@ -289,7 +287,13 @@ export default function App() {
       rail.removeEventListener('focusin', pause)
       rail.removeEventListener('focusout', resume)
     }
-  }, [])
+  }
+
+  const moveCases = (direction) => {
+    const rail = casesRef.current
+    if (!rail) return
+    rail.scrollBy({ left: direction * (rail.clientWidth * 0.82), behavior: 'smooth' })
+  }
 
   // Size the name so it spans the full content width on one line.
   useLayoutEffect(() => {
@@ -313,7 +317,7 @@ export default function App() {
       gsap.from('.hero-line', { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.08 })
       gsap.from('.hero-fade', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.35, stagger: 0.06 })
       gsap.from('.journey-line', { strokeDashoffset: 1, duration: 2.2, ease: 'power3.inOut', scrollTrigger: { trigger: '.journey-graph', start: 'top 80%', once: true } })
-      gsap.from('.journey-point', { scale: 0, transformOrigin: 'center', duration: 0.45, stagger: 0.16, ease: 'back.out(2)', scrollTrigger: { trigger: '.journey-graph', start: 'top 80%', once: true } })
+      gsap.from('.journey-point', { attr: { r: 0 }, duration: 0.45, stagger: 0.16, ease: 'back.out(2)', scrollTrigger: { trigger: '.journey-graph', start: 'top 80%', once: true } })
 
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.from(el, {
@@ -372,11 +376,11 @@ export default function App() {
         <section id="work" className="wrap section">
           <h2 className="reveal">Work</h2>
           <div className="cases-shell">
-             <button className="cases-prev" type="button" aria-label="Previous project">←</button>
+             <button className="cases-prev" type="button" aria-label="Previous project" onClick={() => moveCases(-1)}>←</button>
              <div className="cases" ref={casesRef}>
                {projects.map((p) => <Case p={p} key={p.name} />)}
              </div>
-             <button className="cases-next" type="button" aria-label="Next project">→</button>
+             <button className="cases-next" type="button" aria-label="Next project" onClick={() => moveCases(1)}>→</button>
            </div>
           <div className="more reveal">
             <span className="label">Also built</span>
