@@ -118,7 +118,8 @@ h2 {
 .when em { display: block; font-style: normal; color: var(--faint); margin-top: 2px; }
 
 /* cases */
- .cases-shell { position: relative; }`n .cases {
+ .cases-shell { position: relative; }
+ .cases {
    display: flex; gap: 28px; overflow-x: auto; overscroll-behavior-x: contain;
    width: 100vw; margin-left: calc(50% - 50vw);
    padding: 8px max(20px, calc((100vw - 1080px) / 2)) 28px;
@@ -126,7 +127,11 @@ h2 {
    scrollbar-width: thin; scrollbar-color: var(--line) transparent;
    scrollbar-width: none;
  }
- .cases::-webkit-scrollbar { display: none; }`n .cases-prev, .cases-next { position: absolute; top: 50%; z-index: 2; width: 42px; height: 42px; border: 1px solid var(--ink); border-radius: 50%; background: var(--paper); font-size: 24px; line-height: 1; cursor: pointer; transform: translateY(-50%); transition: background .2s, color .2s; }`n .cases-prev:hover, .cases-next:hover { background: var(--ink); color: var(--paper); }`n .cases-prev { left: 10px; }`n .cases-next { right: 10px; }
+ .cases::-webkit-scrollbar { display: none; }
+ .cases-prev, .cases-next { position: absolute; top: 50%; z-index: 2; width: 42px; height: 42px; border: 1px solid var(--ink); border-radius: 50%; background: var(--paper); font-size: 24px; line-height: 1; cursor: pointer; transform: translateY(-50%); transition: background .2s, color .2s; }
+ .cases-prev:hover, .cases-next:hover { background: var(--ink); color: var(--paper); }
+ .cases-prev { left: 10px; }
+ .cases-next { right: 10px; }
  .case {
    flex: 0 0 min(900px, calc(100vw - 80px)); display: grid; grid-template-columns: 420px 1fr;
    gap: 44px; padding: 40px 0; border-bottom: 1px solid var(--line); scroll-snap-align: start;
