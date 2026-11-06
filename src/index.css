@@ -40,7 +40,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-bottom: 1px solid var(--line);
 }
 .logo { font-family: var(--serif); font-size: 28px; line-height: 1; }
-.logo span, h2 span { color: var(--accent); }
+
 .nav nav { display: flex; gap: 28px; }
 .nav nav a {
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub);
@@ -131,7 +131,7 @@ h2 {
 .case-frame { overflow: hidden; border-block: 1px solid var(--line); }
 .case-zoom { will-change: transform; }
 .case-frame .art { border-block: 0; display: block; }
-.case-media img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: center top; }
+.case-media img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: contain; object-position: center; background: #fff; }
 .art { aspect-ratio: 4 / 3; width: 100%; border-block: 1px solid var(--line); background: var(--paper-2); }
 .art-line { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 3 4; }
 .art-node { fill: var(--paper); stroke: var(--ink); stroke-width: 1.4; }
@@ -205,7 +205,7 @@ h3 { font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 
 .mail:hover { color: var(--accent); border-color: var(--accent); }
 
 .foot {
-  display: flex; justify-content: space-between; margin-top: 72px; padding: 22px 0 34px;
+  display: flex; justify-content: flex-end; margin-top: 72px; padding: 22px 0 34px;
   border-top: 1px solid var(--line);
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint);
 }
