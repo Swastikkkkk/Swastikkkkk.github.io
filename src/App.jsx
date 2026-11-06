@@ -140,7 +140,7 @@ function motifTimeline(el, type) {
 
 function JourneyGraph() {
   const points = [
-    [70, 172], [205, 142], [340, 112], [475, 126], [610, 82], [745, 58], [880, 28],
+    [100, 150], [290, 118], [480, 92], [670, 62], [860, 30],
   ]
   const line = points.map(([x, y], i) => `${i ? 'L' : 'M'} ${x} ${y}`).join(' ')
   return (
