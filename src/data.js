@@ -104,10 +104,7 @@ export const more = [
   { name: 'Guardian', desc: 'Safe-route engine that scores streets from map, weather and camera data.', href: 'https://github.com/Swastikkkkk/guardian-backend' },
 ]
 
-export const journey = [
-  { year: '2013–2018', title: 'CCDS School', detail: 'Ghaziabad · Till class 7', type: 'school' },
-  { year: '2018–2023', title: 'Gyanshree School', detail: 'Noida · Classes 8–12', type: 'school' },
-  { year: '2023–2027', title: 'Manipal University Jaipur', detail: 'Computer Science · B.Tech', type: 'university' },
+export const journey = [  { year: '2023–2027', title: 'Manipal University Jaipur', detail: 'Computer Science · B.Tech', type: 'university' },
   { year: 'Summer 2024', title: 'NetNivaran', detail: 'Web Development Intern', type: 'work' },
   { year: 'Summer 2025', title: 'KPMG', detail: 'Academic Intern · Analytics', type: 'work' },
   { year: 'Summer 2026', title: 'JPMorgan Chase', detail: 'Software Development Intern · iOS Payments', type: 'work' },
