@@ -118,8 +118,20 @@ h2 {
 .when em { display: block; font-style: normal; color: var(--faint); margin-top: 2px; }
 
 /* cases */
-.case { display: grid; grid-template-columns: 420px 1fr; gap: 44px; padding: 40px 0; border-bottom: 1px solid var(--line); }
-.case-media {
+ .cases {
+   display: flex; gap: 28px; overflow-x: auto; overscroll-behavior-x: contain;
+   width: 100vw; margin-left: calc(50% - 50vw);
+   padding: 8px max(20px, calc((100vw - 1080px) / 2)) 28px;
+   scroll-snap-type: x mandatory; scroll-padding-inline: max(20px, calc((100vw - 1080px) / 2));
+   scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+   cursor: grab;
+ }
+ .cases:active { cursor: grabbing; }
+ .case {
+   flex: 0 0 min(900px, calc(100vw - 80px)); display: grid; grid-template-columns: 420px 1fr;
+   gap: 44px; padding: 40px 0; border-bottom: 1px solid var(--line); scroll-snap-align: start;
+ }
+ .case-media {
   position: relative; display: flex; flex-direction: column;
   background: var(--paper-2); border: 1px solid var(--ink); align-self: start;
 }
