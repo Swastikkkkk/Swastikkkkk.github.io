@@ -143,7 +143,21 @@ h2 {
  }
  .cases::-webkit-scrollbar { display: none; }
  .cases-prev, .cases-next { position: absolute; top: 50%; z-index: 2; width: 42px; height: 42px; border: 1px solid var(--ink); border-radius: 50%; background: var(--paper); font-size: 24px; line-height: 1; cursor: pointer; transform: translateY(-50%); transition: background .2s, color .2s; }
- .cases-prev:hover, .cases-next:hover { background: var(--ink); color: var(--paper); }
+ .cases-prev:hover, .cases-next:hover { background: var(--ink); color: var(--paper); animation-play-state: paused; }
+.cases-prev, .cases-next { animation: carousel-arrow-nudge 2.6s ease-in-out infinite; }
+.cases-prev { animation-delay: .2s; }
+.cases-next { animation-delay: .9s; }
+@keyframes carousel-arrow-nudge {
+  0%, 62%, 100% { transform: translateY(-50%) translateX(0); }
+  72% { transform: translateY(-50%) translateX(4px); }
+  82% { transform: translateY(-50%) translateX(0); }
+}
+.cases-prev { animation-name: carousel-arrow-nudge-left; }
+@keyframes carousel-arrow-nudge-left {
+  0%, 62%, 100% { transform: translateY(-50%) translateX(0); }
+  72% { transform: translateY(-50%) translateX(-4px); }
+  82% { transform: translateY(-50%) translateX(0); }
+}
  .cases-prev { left: 10px; }
  .cases-next { right: 10px; }
  .case {
