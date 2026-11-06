@@ -261,7 +261,6 @@ export default function App() {
   return (
     <div ref={root}>
       <header className="nav">
-        <a href="#top" className="logo">swastik<span>.</span></a>
         <nav>
           <a href="#work">Work</a>
           <a href="#experience">Experience</a>
@@ -305,7 +304,7 @@ export default function App() {
 
 
         <section id="work" className="wrap section">
-          <h2 className="reveal">Work<span>.</span></h2>
+          <h2 className="reveal">Work</h2>
           <div className="cases">
             {projects.map((p) => <Case p={p} key={p.name} />)}
           </div>
@@ -323,7 +322,7 @@ export default function App() {
         </section>
 
         <section id="experience" className="wrap section">
-          <h2 className="reveal">Experience<span>.</span></h2>
+          <h2 className="reveal">Experience</h2>
           <ul className="rows">
             {experience.map((e) => (
               <li className="row reveal" key={e.role}>
@@ -338,7 +337,7 @@ export default function App() {
           </ul>
 
           <div className="wins-head reveal">
-            <h2 className="sub">Wins<span>.</span></h2>
+            <h2 className="sub">Wins</h2>
             <p className="wins-count"><strong>{winsCount}</strong> hackathon wins. The ones I'm proudest of:</p>
           </div>
           <ul className="rows">
@@ -353,7 +352,7 @@ export default function App() {
         </section>
 
         <section id="contact" className="wrap section contact">
-          <h2 className="reveal">Say hello<span>.</span></h2>
+          <h2 className="reveal">Say hello</h2>
           <a className="mail reveal" href={`mailto:${links.email}`}>{links.email}</a>
           <div className="socials reveal">
             <a href={links.github} target="_blank" rel="noreferrer"><FaGithub /> GitHub</a>
@@ -364,7 +363,6 @@ export default function App() {
       </main>
 
       <footer className="wrap foot">
-        <span>Swastik Dutt</span>
         <span>Noida, India</span>
       </footer>
     </div>
