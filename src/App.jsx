@@ -144,7 +144,7 @@ function JourneyGraph() {
   ]
   const line = points.map(([x, y], i) => `${i ? 'L' : 'M'} ${x} ${y}`).join(' ')
   return (
-    <div className="journey-graph reveal">
+    <div className="journey-graph">
       <svg viewBox="0 0 950 230" role="img" aria-label="Education and career journey timeline">
         <defs>
           <linearGradient id="journey-fill" x1="0" x2="1" y1="0" y2="1">
