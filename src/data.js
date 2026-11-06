@@ -8,7 +8,7 @@ export const links = {
 export const highlights = [
   { k: 'Next', title: 'JPMorgan Chase', sub: 'Incoming Software Development Engineer' },
   { k: 'Won', title: 'Smart India Hackathon 2025', sub: 'Winner out of 68,000+ teams' },
-  { k: 'Won', title: 'Google Codeclash 2.0', sub: 'First place with Lerno.ai' },
+  { k: 'Won', title: 'Google Codeclash 2.0', sub: 'First place with ExplAInr' },
 ]
 
 export const projects = [
@@ -31,8 +31,8 @@ export const projects = [
     img: '/work/prepninja.jpg',
     desc: 'Proctored AI mock interviews, coding rounds with a sandboxed code runner, and an ATS resume check, in one place.',
     engineering:
-      'Gemini writes role-specific questions. Video answers are transcribed with Deepgram and scored on five axes. Coding problems keep only the test cases that Gemini’s own solution passes in a Judge0 sandbox. A per-topic skill score drives a weekly study plan, benchmarked against BKT and DKT on ASSISTments.',
-    stack: ['React', 'Node', 'Gemini', 'Deepgram', 'Judge0'],
+      'NVIDIA Nemotron writes role-specific questions, transcribes video answers and scores them on five axes. Coding problems keep only the test cases that the model’s own solution passes in a Judge0 sandbox. A per-topic skill score drives a weekly study plan, benchmarked against BKT and DKT on ASSISTments.',
+    stack: ['React', 'Node', 'NVIDIA Nemotron', 'Judge0'],
     live: 'https://prepninja-tawny.vercel.app',
     code: 'https://github.com/Swastikkkkk/PrepNinja',
   },
@@ -61,20 +61,20 @@ export const projects = [
     code: 'https://github.com/Swastikkkkk/jalnetra',
   },
   {
-    name: 'Lerno.ai',
+    name: 'ExplAInr',
     kind: 'Ed-tech',
     year: '2025',
     award: 'First place, Google Codeclash 2.0',
     img: '/work/lerno.jpg',
     desc: 'Type a concept and get a short animated explainer back, with a chat tutor next to the video for follow-up questions.',
     engineering:
-      'Claude plans the lesson as a storyboard, then writes narration and a deliberately simple Manim scene for each frame so it renders reliably. FastAPI renders the scenes to video and uploads them to Firebase Storage. Gemini powers the side chat.',
-    stack: ['React', 'FastAPI', 'Claude', 'Manim', 'Firebase'],
+      'An LLM plans the lesson as a storyboard, then writes narration and a deliberately simple Manim scene for each frame so it renders reliably. It runs on a free, keyless model by default, so no paid API is needed. FastAPI renders the scenes to video and uploads them to Firebase Storage.',
+    stack: ['React', 'FastAPI', 'Manim', 'Pollinations', 'Firebase'],
     live: 'https://lerno-peach.vercel.app',
     code: 'https://github.com/Swastikkkkk/lerno',
   },
   {
-    name: 'District Mesh',
+    name: 'NoBars',
     kind: 'iOS',
     year: '2026',
     art: 'mesh',
@@ -82,7 +82,8 @@ export const projects = [
     engineering:
       'Phones find each other over Bluetooth and peer-to-peer Wi-Fi with MultipeerConnectivity. Every packet carries a TTL and is re-broadcast to neighbours, with a seen-packet cache to drop loops, so messages reach people far outside the sender’s range. Messages sent with nobody nearby are stored and forwarded when a peer shows up.',
     stack: ['Swift', 'SwiftUI', 'MultipeerConnectivity', 'Live Activities'],
-    code: 'https://github.com/Swastikkkkk/District_Mesh',
+    live: 'https://swastikkkkk.github.io/NoBars/',
+    code: 'https://github.com/Swastikkkkk/NoBars',
   },
 ]
 
@@ -110,7 +111,7 @@ export const wins = [
   {
     year: '2025',
     what: 'Google Codeclash 2.0',
-    built: 'Lerno.ai',
+    built: 'ExplAInr',
     note: 'Turns any concept into a narrated, animated lesson. First place at Google Gurugram, ahead of 1,000+ teams.',
   },
   {
