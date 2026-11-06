@@ -5,7 +5,7 @@ import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useGSAP } from '@gsap/react'
 import { FiArrowUpRight, FiPlus, FiMinus, FiMail } from 'react-icons/fi'
 import { FaGithub, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
-import { links, stats, projects, more, experience, wins, winsCount } from './data'
+import { links, projects, more, experience, wins, winsCount } from './data'
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP)
 
@@ -248,17 +248,7 @@ export default function App() {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.from('.hero-line', { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.08 })
       gsap.from('.hero-fade', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.35, stagger: 0.06 })
-      gsap.utils.toArray('.stat-num').forEach((el) => {
-        const end = parseFloat(el.dataset.value)
-        const dec = parseInt(el.dataset.decimals, 10)
-        const o = { v: 0 }
-        gsap.to(o, {
-          v: end, duration: 1.6, ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 92%', once: true },
-          onUpdate: () => { el.textContent = o.v.toFixed(dec) },
-        })
-      })
-      gsap.from('.stat', { opacity: 0, y: 24, duration: 0.8, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger: '.stats', start: 'top 90%', once: true } })
+
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.from(el, {
           opacity: 0, y: 28, duration: 0.9, ease: 'power3.out',
@@ -313,17 +303,6 @@ export default function App() {
           </div>
         </section>
 
-        <section className="wrap">
-          <div className="stats">
-            {stats.map((st) => (
-              <div className={`stat ${st.img ? 'has-img' : ''}`} key={st.label} style={st.img ? { backgroundImage: `url(${st.img})` } : undefined}>
-                <span className="stat-num" data-value={st.value} data-decimals={st.decimals || 0}>{st.value}</span>
-                <strong>{st.label}</strong>
-                <span className="muted">{st.sub}</span>
-              </div>
-            ))}
-          </div>
-        </section>
 
         <section id="work" className="wrap section">
           <h2 className="reveal">Work<span>.</span></h2>
