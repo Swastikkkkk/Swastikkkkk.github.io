@@ -20,6 +20,7 @@ export const projects = [
     year: '2026',
     built: { label: 'Zomato × Eternal Hackathon', note: 'Started at the hackathon, kept building after' },
     motif: 'mesh',
+    img: '/work/nobars.jpg',
     desc: 'Offline mesh for iPhone. Messages, live location, SOS and voice or video calls hop from phone to phone with no internet and no server.',
     engineering:
       'Phones find each other over Bluetooth and peer-to-peer Wi-Fi with MultipeerConnectivity. Every packet carries a TTL and is re-broadcast to neighbours, with a seen-packet cache to drop loops, so messages reach people far outside the sender’s range. Messages sent with nobody nearby are stored and forwarded when a peer shows up.',

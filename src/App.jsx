@@ -1,15 +1,15 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useGSAP } from '@gsap/react'
-import { FiArrowUpRight, FiPlus, FiMinus, FiMail } from 'react-icons/fi'
+import { FiArrowUpRight, FiArrowLeft, FiArrowRight, FiPlus, FiMinus, FiMail } from 'react-icons/fi'
 import { FaGithub, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
 import { links, projects, more, experience, journey, wins, winsCount } from './data'
 
-gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP)
 
-const pad = (n) => String(n).padStart(2, '0')
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, MotionPathPlugin, useGSAP)
 
 function Ext({ href, children, className = '' }) {
   return (
@@ -254,46 +254,51 @@ export default function App() {
   const nameRef = useRef(null)
   const casesRef = useRef(null)
 
+  const [slide, setSlide] = useState(0)
+  const slideRef = useRef(0)
+  const pausedRef = useRef(false)
+
+  const goTo = (i) => {
+    const rail = casesRef.current
+    if (!rail) return
+    const cards = rail.querySelectorAll('.case')
+    const n = (i + cards.length) % cards.length
+    const pad = parseFloat(getComputedStyle(rail).scrollPaddingInlineStart) || 0
+    gsap.to(rail, { scrollTo: { x: cards[n].offsetLeft - pad }, duration: 0.9, ease: 'power3.inOut' })
+    slideRef.current = n
+    setSlide(n)
+  }
+  const moveCases = (d) => goTo(slideRef.current + d)
+
+  // Autoplay one card every 6s, paused while hovered or focused.
   useEffect(() => {
     const rail = casesRef.current
     if (!rail || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
-    let frame
-    let paused = false
-    const step = 0.35
-    const tick = () => {
-      if (!paused) {
-        rail.scrollLeft += step
-        const first = rail.querySelector('.case')
-        if (first && rail.scrollLeft >= first.offsetWidth + 28) rail.scrollLeft -= first.offsetWidth + 28
-      }
-      frame = requestAnimationFrame(tick)
+    const pause = () => { pausedRef.current = true }
+    const resume = () => { pausedRef.current = false }
+    const sync = () => {
+      const cards = [...rail.querySelectorAll('.case')]
+      const pad = parseFloat(getComputedStyle(rail).scrollPaddingInlineStart) || 0
+      let best = 0
+      cards.forEach((c, i) => { if (Math.abs(c.offsetLeft - pad - rail.scrollLeft) < Math.abs(cards[best].offsetLeft - pad - rail.scrollLeft)) best = i })
+      slideRef.current = best
+      setSlide(best)
     }
-    const pause = () => { paused = true }
-    const resume = () => { paused = false }
-    const move = (direction) => {
-      paused = true
-      rail.scrollBy({ left: direction * (rail.clientWidth * 0.82), behavior: 'smooth' })
-      window.setTimeout(resume, 1800)
-    }
+    const id = window.setInterval(() => { if (!pausedRef.current && !document.hidden) goTo(slideRef.current + 1) }, 6000)
     rail.addEventListener('mouseenter', pause)
     rail.addEventListener('mouseleave', resume)
     rail.addEventListener('focusin', pause)
     rail.addEventListener('focusout', resume)
-    frame = requestAnimationFrame(tick)
+    rail.addEventListener('scrollend', sync)
     return () => {
-      cancelAnimationFrame(frame)
+      window.clearInterval(id)
       rail.removeEventListener('mouseenter', pause)
       rail.removeEventListener('mouseleave', resume)
       rail.removeEventListener('focusin', pause)
       rail.removeEventListener('focusout', resume)
+      rail.removeEventListener('scrollend', sync)
     }
   }, [])
-
-  const moveCases = (direction) => {
-    const rail = casesRef.current
-    if (!rail) return
-    rail.scrollBy({ left: direction * (rail.clientWidth * 0.82), behavior: 'smooth' })
-  }
 
   // Size the name so it spans the full content width on one line.
   useLayoutEffect(() => {
@@ -374,14 +379,17 @@ export default function App() {
 
 
         <section id="work" className="wrap section">
-          <h2 className="reveal">Work</h2>
-          <div className="cases-shell">
-             <button className="cases-prev" type="button" aria-label="Previous project" onClick={() => moveCases(-1)}>←</button>
-             <div className="cases" ref={casesRef}>
-               {projects.map((p) => <Case p={p} key={p.name} />)}
-             </div>
-             <button className="cases-next" type="button" aria-label="Next project" onClick={() => moveCases(1)}>→</button>
-           </div>
+          <div className="work-head reveal">
+            <h2>Work</h2>
+            <div className="cases-nav">
+              <span className="cases-count">{String(slide + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+              <button type="button" aria-label="Previous project" onClick={() => moveCases(-1)}><FiArrowLeft /></button>
+              <button type="button" aria-label="Next project" onClick={() => moveCases(1)}><FiArrowRight /></button>
+            </div>
+          </div>
+          <div className="cases" ref={casesRef}>
+            {projects.map((p) => <Case p={p} key={p.name} />)}
+          </div>
           <div className="more reveal">
             <span className="label">Also built</span>
             <div className="more-grid">
