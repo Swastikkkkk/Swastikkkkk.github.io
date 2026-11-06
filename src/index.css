@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
 :root {
   --paper: #f2ede3;
   --paper-2: #e9e2d4;
@@ -7,8 +9,8 @@
   --line: rgba(21, 20, 19, 0.16);
   --accent: #2f5d4e;
   --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
-  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --mono: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: 'SF Mono', ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
   color-scheme: light;
 }
 
