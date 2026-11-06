@@ -287,7 +287,7 @@ export default function App() {
       rail.removeEventListener('focusin', pause)
       rail.removeEventListener('focusout', resume)
     }
-  }
+  }, [])
 
   const moveCases = (direction) => {
     const rail = casesRef.current
