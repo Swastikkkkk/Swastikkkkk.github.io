@@ -117,7 +117,7 @@ h2 {
 .wins-count strong { font-family: var(--serif); font-weight: 400; font-size: 34px; color: var(--ink); margin-right: 6px; vertical-align: -3px; }
 .when em { display: block; font-style: normal; color: var(--faint); margin-top: 2px; }
 
-.journey-graph { margin: 34px 0 42px; padding: 22px 0 0; overflow: hidden; }
+.journey-graph { margin: 34px 0 42px; padding: 22px 0 0; overflow: hidden; opacity: 1 !important; transform: none !important; }
 .journey-graph svg { display: block; width: 100%; height: auto; overflow: visible; }
 .journey-grid { fill: none; stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 8; transform: translateY(3px); }
 .journey-area { fill: url(#journey-fill); opacity: .7; }
