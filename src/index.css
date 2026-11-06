@@ -133,14 +133,13 @@ h2 {
 
 /* cases */
  .cases {
-   display: flex; gap: 28px; overflow-x: auto; overscroll-behavior-x: contain;
-   width: 100vw; margin-left: calc(50% - 50vw);
+   overflow: hidden; width: 100vw; margin-left: calc(50% - 50vw);
    padding: 8px max(20px, calc((100vw - 1080px) / 2)) 28px;
-   scroll-snap-type: x proximity; scroll-padding-inline: max(20px, calc((100vw - 1080px) / 2));
-   scrollbar-width: thin; scrollbar-color: var(--line) transparent;
-   scrollbar-width: none;
+   touch-action: pan-y;
  }
- .cases::-webkit-scrollbar { display: none; }
+ .cases-track { display: flex; gap: 28px; will-change: transform; cursor: grab; }
+ .cases-track:active { cursor: grabbing; }
+ .cases-track img { pointer-events: none; user-select: none; }
 .work-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 8px; }
 .work-head h2 { border-bottom: 0; margin-bottom: 0; }
 .cases-nav { display: flex; align-items: center; gap: 8px; padding-bottom: 18px; }
@@ -149,7 +148,7 @@ h2 {
 .cases-nav button:hover { background: var(--ink); color: var(--paper); }
  .case {
    flex: 0 0 min(900px, calc(100vw - 80px)); display: grid; grid-template-columns: 420px 1fr;
-   gap: 44px; padding: 40px 0; border-bottom: 1px solid var(--line); scroll-snap-align: start;
+   gap: 44px; padding: 40px 0; border-bottom: 1px solid var(--line);
  }
  .case-media {
   position: relative; display: flex; flex-direction: column;

@@ -1,7 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import { Draggable } from 'gsap/Draggable'
+import { InertiaPlugin } from 'gsap/InertiaPlugin'
+import { Observer } from 'gsap/Observer'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useGSAP } from '@gsap/react'
 import { FiArrowUpRight, FiArrowLeft, FiArrowRight, FiPlus, FiMinus, FiMail } from 'react-icons/fi'
@@ -9,7 +11,7 @@ import { FaGithub, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
 import { links, projects, more, experience, journey, wins, winsCount } from './data'
 
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, MotionPathPlugin, useGSAP)
+gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin, Observer, MotionPathPlugin, useGSAP)
 
 function Ext({ href, children, className = '' }) {
   return (
@@ -256,49 +258,89 @@ export default function App() {
 
   const [slide, setSlide] = useState(0)
   const slideRef = useRef(0)
-  const pausedRef = useRef(false)
+  const sliderRef = useRef({})
 
-  const goTo = (i) => {
+  // Transform-based slider: GSAP moves the track, Draggable adds drag with inertia.
+  useGSAP(() => {
     const rail = casesRef.current
-    if (!rail) return
-    const cards = rail.querySelectorAll('.case')
-    const n = (i + cards.length) % cards.length
-    const pad = parseFloat(getComputedStyle(rail).scrollPaddingInlineStart) || 0
-    gsap.to(rail, { scrollTo: { x: cards[n].offsetLeft - pad }, duration: 0.9, ease: 'power3.inOut' })
-    slideRef.current = n
-    setSlide(n)
-  }
-  const moveCases = (d) => goTo(slideRef.current + d)
+    const track = rail.querySelector('.cases-track')
+    const cards = gsap.utils.toArray(track.children)
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let stops = []
+    let paused = false
+    let tween
+    let last = 0
 
-  // Autoplay one card every 6s, paused while hovered or focused.
-  useEffect(() => {
-    const rail = casesRef.current
-    if (!rail || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
-    const pause = () => { pausedRef.current = true }
-    const resume = () => { pausedRef.current = false }
-    const sync = () => {
-      const cards = [...rail.querySelectorAll('.case')]
-      const pad = parseFloat(getComputedStyle(rail).scrollPaddingInlineStart) || 0
-      let best = 0
-      cards.forEach((c, i) => { if (Math.abs(c.offsetLeft - pad - rail.scrollLeft) < Math.abs(cards[best].offsetLeft - pad - rail.scrollLeft)) best = i })
-      slideRef.current = best
-      setSlide(best)
+    const measure = () => {
+      const max = Math.max(0, track.scrollWidth - rail.clientWidth)
+      stops = cards.map((c) => -Math.min(c.offsetLeft - cards[0].offsetLeft, max))
     }
-    const id = window.setInterval(() => { if (!pausedRef.current && !document.hidden) goTo(slideRef.current + 1) }, 6000)
+    const nearest = (x) => stops.reduce((best, v, i) => (Math.abs(v - x) < Math.abs(stops[best] - x) ? i : best), 0)
+    const mark = (n) => {
+      slideRef.current = n
+      setSlide(n)
+      gsap.to(cards, { opacity: (i) => (i === n ? 1 : 0.4), duration: reduce ? 0 : 0.6, ease: 'power2.out', overwrite: 'auto' })
+    }
+    const goTo = (i, auto = false) => {
+      if (!auto) last = Date.now()
+      const n = (i + cards.length) % cards.length
+      tween?.kill()
+      tween = gsap.to(track, { x: stops[n], duration: reduce ? 0 : 1.1, ease: 'power3.inOut' })
+      mark(n)
+    }
+    sliderRef.current.goTo = goTo
+
+    measure()
+    mark(0)
+
+    const [drag] = Draggable.create(track, {
+      type: 'x',
+      inertia: true,
+      edgeResistance: 0.85,
+      dragClickables: false,
+      bounds: { minX: () => stops[stops.length - 1], maxX: 0 },
+      snap: (x) => stops[nearest(x)],
+      onPress: () => { tween?.kill(); paused = true; last = Date.now() },
+      onThrowComplete: () => { mark(nearest(gsap.getProperty(track, 'x'))); paused = false },
+      onRelease() { if (!this.isThrowing) { mark(nearest(this.x)); paused = false } },
+    })
+    drag.applyBounds({ minX: stops[stops.length - 1], maxX: 0 })
+
+    // Trackpad side-swipes step one card at a time.
+    const obs = Observer.create({
+      target: rail, type: 'wheel', wheelSpeed: -1, tolerance: 40, preventDefault: false,
+      onLeft: (self) => { if (Math.abs(self.deltaX) > Math.abs(self.deltaY)) goTo(Math.min(slideRef.current + 1, cards.length - 1)) },
+      onRight: (self) => { if (Math.abs(self.deltaX) > Math.abs(self.deltaY)) goTo(Math.max(slideRef.current - 1, 0)) },
+    })
+
+    const onResize = () => {
+      measure()
+      drag.applyBounds({ minX: stops[stops.length - 1], maxX: 0 })
+      gsap.set(track, { x: stops[slideRef.current] })
+    }
+    window.addEventListener('resize', onResize)
+
+    const pause = () => { paused = true }
+    const resume = () => { paused = false }
     rail.addEventListener('mouseenter', pause)
     rail.addEventListener('mouseleave', resume)
     rail.addEventListener('focusin', pause)
     rail.addEventListener('focusout', resume)
-    rail.addEventListener('scrollend', sync)
+    const id = reduce ? 0 : window.setInterval(() => { if (!paused && !document.hidden && Date.now() - last > 6000) goTo(slideRef.current + 1, true) }, 6000)
+
     return () => {
       window.clearInterval(id)
+      window.removeEventListener('resize', onResize)
       rail.removeEventListener('mouseenter', pause)
       rail.removeEventListener('mouseleave', resume)
       rail.removeEventListener('focusin', pause)
       rail.removeEventListener('focusout', resume)
-      rail.removeEventListener('scrollend', sync)
+      drag.kill()
+      obs.kill()
     }
-  }, [])
+  }, { scope: casesRef })
+
+  const moveCases = (d) => sliderRef.current.goTo?.(slideRef.current + d)
 
   // Size the name so it spans the full content width on one line.
   useLayoutEffect(() => {
@@ -388,7 +430,9 @@ export default function App() {
             </div>
           </div>
           <div className="cases" ref={casesRef}>
-            {projects.map((p) => <Case p={p} key={p.name} />)}
+            <div className="cases-track">
+              {projects.map((p) => <Case p={p} key={p.name} />)}
+            </div>
           </div>
           <div className="more reveal">
             <span className="label">Also built</span>
