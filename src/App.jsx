@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
@@ -226,6 +226,44 @@ function Case({ p }) {
 export default function App() {
   const root = useRef(null)
   const nameRef = useRef(null)
+  const casesRef = useRef(null)
+
+  useEffect(() => {
+    const rail = casesRef.current
+    if (!rail || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    let frame
+    let paused = false
+    const step = 0.35
+    const tick = () => {
+      if (!paused) {
+        rail.scrollLeft += step
+        const first = rail.querySelector('.case')
+        if (first && rail.scrollLeft >= first.offsetWidth + 28) rail.scrollLeft -= first.offsetWidth + 28
+      }
+      frame = requestAnimationFrame(tick)
+    }
+    const pause = () => { paused = true }
+    const resume = () => { paused = false }
+    const move = (direction) => {
+      paused = true
+      rail.scrollBy({ left: direction * (rail.clientWidth * 0.82), behavior: 'smooth' })
+      window.setTimeout(resume, 1800)
+    }
+    rail.addEventListener('mouseenter', pause)
+    rail.addEventListener('mouseleave', resume)
+    rail.addEventListener('focusin', pause)
+    rail.addEventListener('focusout', resume)
+    rail.parentElement.querySelector('.cases-prev')?.addEventListener('click', () => move(-1))
+    rail.parentElement.querySelector('.cases-next')?.addEventListener('click', () => move(1))
+    frame = requestAnimationFrame(tick)
+    return () => {
+      cancelAnimationFrame(frame)
+      rail.removeEventListener('mouseenter', pause)
+      rail.removeEventListener('mouseleave', resume)
+      rail.removeEventListener('focusin', pause)
+      rail.removeEventListener('focusout', resume)
+    }
+  }, [])
 
   // Size the name so it spans the full content width on one line.
   useLayoutEffect(() => {
@@ -305,9 +343,13 @@ export default function App() {
 
         <section id="work" className="wrap section">
           <h2 className="reveal">Work</h2>
-          <div className="cases">
-            {projects.map((p) => <Case p={p} key={p.name} />)}
-          </div>
+          <div className="cases-shell">
+             <button className="cases-prev" type="button" aria-label="Previous project">←</button>
+             <div className="cases" ref={casesRef}>
+               {projects.map((p) => <Case p={p} key={p.name} />)}
+             </div>
+             <button className="cases-next" type="button" aria-label="Next project">→</button>
+           </div>
           <div className="more reveal">
             <span className="label">Also built</span>
             <div className="more-grid">
