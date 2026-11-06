@@ -428,12 +428,12 @@ export default function App() {
               </div>
             </div>
             <aside className="now hero-fade">
-              <div className="now-top"><span>Now</span><span>2026</span></div>
+              <div className="now-top"><span>Lately</span><span>Nov 2026</span></div>
               <dl>
-                <div><dt>Studying</dt><dd>Final-year CS, Manipal University Jaipur</dd></div>
-                <div><dt>Next</dt><dd>SDE at JPMorgan Chase</dd></div>
-                <div><dt>Building</dt><dd><a href="https://www.sketchracer.com" target="_blank" rel="noreferrer">SketchRacer</a>, a driving game for the browser</dd></div>
-                <div><dt>Based in</dt><dd>Noida, India</dd></div>
+                <div><dt>In college</dt><dd>Wrapping up my last year of CS at Manipal University Jaipur</dd></div>
+                <div><dt>After that</dt><dd>Heading back to JPMorgan Chase, this time full time as an SDE</dd></div>
+                <div><dt>Up late on</dt><dd><a href="https://www.sketchracer.com" target="_blank" rel="noreferrer">SketchRacer</a>, a browser racing game my friends and I play every day</dd></div>
+                <div><dt>Home</dt><dd>Noida, India</dd></div>
               </dl>
             </aside>
           </div>
