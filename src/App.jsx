@@ -5,7 +5,7 @@ import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useGSAP } from '@gsap/react'
 import { FiArrowUpRight, FiPlus, FiMinus, FiMail } from 'react-icons/fi'
 import { FaGithub, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
-import { links, projects, more, experience, wins, winsCount } from './data'
+import { links, projects, more, experience, journey, wins, winsCount } from './data'
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP)
 
@@ -138,6 +138,32 @@ function motifTimeline(el, type) {
   return tl
 }
 
+function JourneyGraph() {
+  const points = [
+    [70, 172], [205, 142], [340, 112], [475, 126], [610, 82], [745, 58], [880, 28],
+  ]
+  const line = points.map(([x, y], i) => `${i ? 'L' : 'M'} ${x} ${y}`).join(' ')
+  return (
+    <div className="journey-graph reveal">
+      <svg viewBox="0 0 950 230" role="img" aria-label="Education and career journey timeline">
+        <defs>
+          <linearGradient id="journey-fill" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stopColor="var(--accent)" stopOpacity=".24" />
+            <stop offset="1" stopColor="var(--accent)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        {[0, 1, 2, 3].map((i) => <path key={i} className="journey-grid" d={`M 48 ${55 + i * 42} L 900 ${25 + i * 42}`} />)}
+        <path className="journey-area" d={`${line} L 880 205 L 70 205 Z`} />
+        <path className="journey-shadow" d={line} />
+        <path className="journey-line" d={line} pathLength="1" />
+        {points.map(([x, y], i) => <circle key={i} className="journey-point" cx={x} cy={y} r="5" />)}
+      </svg>
+      <div className="journey-labels">
+        {journey.map((item) => <div className={`journey-label journey-${item.type}`} key={item.year}><span>{item.year}</span><strong>{item.title}</strong><small>{item.detail}</small></div>)}
+      </div>
+    </div>
+  )
+}
 function Case({ p }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
@@ -365,6 +391,7 @@ export default function App() {
 
         <section id="experience" className="wrap section">
           <h2 className="reveal">Experience</h2>
+           <JourneyGraph />
           <ul className="rows">
             {experience.map((e) => (
               <li className="row reveal" key={e.role}>
