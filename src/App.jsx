@@ -140,29 +140,37 @@ function motifTimeline(el, type) {
   return tl
 }
 
+const J_W = 1000
+const J_H = 220
+const J_BASE = 205
+
 function JourneyGraph() {
-  const points = [
-    [100, 150], [290, 118], [480, 92], [670, 62], [860, 30],
-  ]
+  const n = journey.length
+  // One point per column, so every dot sits exactly above its label.
+  const points = journey.map((_, i) => [((i + 0.5) / n) * J_W, 160 - (i / (n - 1)) * 120])
   const line = points.map(([x, y], i) => `${i ? 'L' : 'M'} ${x} ${y}`).join(' ')
   return (
+    <div className="journey-scroll">
     <div className="journey-graph">
-      <svg viewBox="0 0 950 230" role="img" aria-label="Education and career journey timeline">
+      <svg viewBox={`0 0 ${J_W} ${J_H}`} preserveAspectRatio="none" role="img" aria-label="Education and career journey timeline">
         <defs>
-          <linearGradient id="journey-fill" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stopColor="var(--accent)" stopOpacity=".24" />
+          <linearGradient id="journey-fill" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stopColor="var(--accent)" stopOpacity=".18" />
             <stop offset="1" stopColor="var(--accent)" stopOpacity="0" />
           </linearGradient>
         </defs>
-        {[0, 1, 2, 3].map((i) => <path key={i} className="journey-grid" d={`M 48 ${55 + i * 42} L 900 ${25 + i * 42}`} />)}
-        <path className="journey-area" d={`${line} L 880 205 L 70 205 Z`} />
-        <path className="journey-shadow" d={line} />
+        <path className="journey-area" d={`${line} L ${points[n - 1][0]} ${J_BASE} L ${points[0][0]} ${J_BASE} Z`} />
+        {points.map(([x, y], i) => <line key={i} className="journey-drop" x1={x} x2={x} y1={y} y2={J_BASE} />)}
+        <line className="journey-base" x1="0" x2={J_W} y1={J_BASE} y2={J_BASE} />
         <path className="journey-line" d={line} pathLength="1" />
-        {points.map(([x, y], i) => <circle key={i} className="journey-point" cx={x} cy={y} r="5" />)}
       </svg>
-      <div className="journey-labels">
+      <div className="journey-dots" aria-hidden>
+        {points.map(([x, y], i) => <span key={i} className="journey-point" style={{ left: `${(x / J_W) * 100}%`, top: `${(y / J_H) * 100}%` }} />)}
+      </div>
+      <div className="journey-labels" style={{ gridTemplateColumns: `repeat(${n}, 1fr)` }}>
         {journey.map((item) => <div className={`journey-label journey-${item.type}`} key={item.year}><span>{item.year}</span><strong>{item.title}</strong><small>{item.detail}</small></div>)}
       </div>
+    </div>
     </div>
   )
 }
@@ -363,8 +371,20 @@ export default function App() {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.from('.hero-line', { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.08 })
       gsap.from('.hero-fade', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.35, stagger: 0.06 })
-      gsap.from('.journey-line', { strokeDashoffset: 1, duration: 2.2, ease: 'power3.inOut', scrollTrigger: { trigger: '.journey-graph', start: 'top 80%', once: true } })
-      gsap.from('.journey-point', { attr: { r: 0 }, duration: 0.45, stagger: 0.16, ease: 'back.out(2)', scrollTrigger: { trigger: '.journey-graph', start: 'top 80%', once: true } })
+      {
+        // Line draws left to right; each dot, drop line and label lands as the line reaches it.
+        const step = 0.55
+        const n = journey.length
+        const tl = gsap.timeline({ scrollTrigger: { trigger: '.journey-graph', start: 'top 75%', once: true } })
+        tl.from('.journey-area', { opacity: 0, duration: step * (n - 1), ease: 'none' }, 0)
+          .from('.journey-line', { strokeDashoffset: 1, duration: step * (n - 1), ease: 'none' }, 0)
+        gsap.utils.toArray('.journey-point').forEach((dot, i) => {
+          const at = i * step
+          tl.from(dot, { scale: 0, duration: 0.4, ease: 'back.out(2.4)' }, at)
+            .from(gsap.utils.toArray('.journey-drop')[i], { attr: { y2: (_, el) => el.getAttribute('y1') }, duration: 0.4, ease: 'power2.out' }, at)
+            .from(gsap.utils.toArray('.journey-label')[i], { opacity: 0, y: 14, duration: 0.5, ease: 'power3.out' }, at + 0.05)
+        })
+      }
 
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.from(el, {
