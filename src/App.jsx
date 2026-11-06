@@ -312,6 +312,8 @@ export default function App() {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.from('.hero-line', { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.08 })
       gsap.from('.hero-fade', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.35, stagger: 0.06 })
+      gsap.from('.journey-line', { strokeDashoffset: 1, duration: 2.2, ease: 'power3.inOut', scrollTrigger: { trigger: '.journey-graph', start: 'top 80%', once: true } })
+      gsap.from('.journey-point', { scale: 0, transformOrigin: 'center', duration: 0.45, stagger: 0.16, ease: 'back.out(2)', scrollTrigger: { trigger: '.journey-graph', start: 'top 80%', once: true } })
 
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.from(el, {
