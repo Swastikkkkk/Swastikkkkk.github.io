@@ -136,24 +136,11 @@ h2 {
 .journey-future strong { color: var(--accent); }
 
 /* cases */
- .cases {
-   overflow: hidden; width: 100vw; margin-left: calc(50% - 50vw);
-   padding: 8px max(20px, calc((100vw - 1080px) / 2)) 28px;
-   touch-action: pan-y;
- }
- .cases-track { display: flex; gap: 28px; will-change: transform; cursor: grab; }
- .cases-track:active { cursor: grabbing; }
- .cases-track img { pointer-events: none; user-select: none; }
-.work-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 8px; }
-.work-head h2 { border-bottom: 0; margin-bottom: 0; }
-.cases-nav { display: flex; align-items: center; gap: 8px; padding-bottom: 18px; }
-.cases-count { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; color: var(--sub); margin-right: 8px; }
-.cases-nav button { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--ink); border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 18px; cursor: pointer; transition: background .2s, color .2s; }
-.cases-nav button:hover { background: var(--ink); color: var(--paper); }
- .case {
-   flex: 0 0 min(900px, calc(100vw - 80px)); display: grid; grid-template-columns: 420px 1fr;
-   gap: 44px; padding: 40px 0; border-bottom: 1px solid var(--line);
- }
+.cases { display: flex; flex-direction: column; }
+.case {
+  display: grid; grid-template-columns: 420px 1fr;
+  gap: 44px; padding: 40px 0; border-bottom: 1px solid var(--line);
+}
  .case-media {
   position: relative; display: flex; flex-direction: column;
   background: var(--paper-2); border: 1px solid var(--ink); align-self: start;
@@ -256,8 +243,11 @@ h3 { font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 
   .case { grid-template-columns: 1fr; gap: 24px; }
 }
 @media (max-width: 640px) {
-  .journey-scroll { overflow-x: auto; margin-inline: -20px; padding: 0 20px 8px; scrollbar-width: none; }
-  .journey-graph { min-width: 680px; }
+  .journey-graph svg, .journey-dots { display: none; }
+  .journey-labels { grid-template-columns: 1fr !important; gap: 0; margin-top: 0; border-left: 2px solid var(--accent); }
+  .journey-label { text-align: left; justify-items: start; padding: 10px 0 10px 16px; position: relative; }
+  .journey-label::before { content: ''; position: absolute; left: -7px; top: 15px; width: 12px; height: 12px; border-radius: 50%; background: var(--paper); border: 2px solid var(--accent); }
+  .journey-future::before { background: var(--accent); }
   .nav nav { gap: 16px; }
   .nav nav a:nth-child(2) { display: none; }
   .hero { padding: 56px 0 40px; }
